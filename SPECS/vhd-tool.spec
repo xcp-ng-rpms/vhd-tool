@@ -1,8 +1,13 @@
 # -*- rpm-spec -*-
+# XCP-ng: release suffix for 'extras' section
+%if "%{?xcp_ng_section}" == "extras"
+%define rel_suffix .extras
+%endif
+
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.20.0
-Release: 3%{?dist}
+Release: 3%{?dist}%{?rel_suffix}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
@@ -14,6 +19,11 @@ BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
 BuildRequires: openssl-devel
 
+# XCP-ng patches
+%if "%{?xcp_ng_section}" == "extras"
+Patch1000: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
+%endif
+
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
 
@@ -21,8 +31,8 @@ Simple command-line tools for manipulating and streaming .vhd format file.
 %autosetup -p1
 cp %{SOURCE1} vhd-tool-sparse_dd-conf
 
-
 %build
+eval $(opam config env --root=/usr/lib/opamroot)
 make
 
 %install
@@ -41,6 +51,9 @@ install -m 755 _build/install/default/bin/get_vhd_vsize %{buildroot}%{_libexecdi
 %{_libexecdir}/xapi/get_vhd_vsize
 
 %changelog
+* Tue Jul 31 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.20.0-3
+- set unbuffered to false in 'extras' build (for ZFS support)
+
 * Thu Mar 22 2018 Marcello Seri <marcello.seri@citrix.com> - 0.20.0-1
 - Catch EAGAIN from sendfile and retry
 
