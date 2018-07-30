@@ -1,4 +1,9 @@
 # -*- rpm-spec -*-
+# XCP-ng: release suffix for 'extras' section
+%if "%{?xcp_ng_section}" == "extras"
+%define rel_suffix .extras
+%endif
+
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.20.0
@@ -14,15 +19,25 @@ BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
 BuildRequires: openssl-devel
 
+#XCP-ng patches
+%if "%{?xcp_ng_section}" == "extras"
+Source2: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
+%endif
+
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
 
 %prep
 %autosetup -p1
 cp %{SOURCE1} vhd-tool-sparse_dd-conf
+#XCP-ng patches
+%if "%{?xcp_ng_section}" == "extras"
+patch -p1 < %{SOURCE2}
+%endif
 
 
 %build
+eval $(opam config env --root=/usr/lib/opamroot)
 make
 
 %install
