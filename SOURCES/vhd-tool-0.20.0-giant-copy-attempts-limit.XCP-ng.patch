@@ -1,0 +1,27 @@
+From e36d91abffd0aa966cd2a91b55e599c8750ded62 Mon Sep 17 00:00:00 2001
+From: Nicolas Raynaud <nraynaud@gmail.com>
+Date: Mon, 30 Jul 2018 16:48:10 -0700
+Subject: [PATCH] Set a giant limit to attempts at copying file data
+
+We have customers whose data can't be copied in only 20 tries.
+Moreover I see no better response to this error code than trying again, I would suggest removing the limit altogether (if it doesn't work eventually the OS will come with a new error like a closed socket or timeout of some sort).
+You might want to slightly randomize the sleep duration and maybe increase it over time.
+
+Upstream pull request: https://github.com/xapi-project/vhd-tool/pull/68
+---
+ src/channels.ml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/channels.ml b/src/channels.ml
+index e50409c..a8cd7f8 100644
+--- a/src/channels.ml
++++ b/src/channels.ml
+@@ -23,7 +23,7 @@ external _sendfile: Unix.file_descr -> Unix.file_descr -> int64 -> int64 = "stub
+ let _sendfile from_fd to_fd len =
+   let from_fd = Lwt_unix.unix_file_descr from_fd in
+   let to_fd = Lwt_unix.unix_file_descr to_fd in
+-  let max_attempts = 20 in
++  let max_attempts = 200000 in
+   let rec loop remaining_attempts =
+     Lwt.catch
+       (fun () -> detach (_sendfile from_fd to_fd) len)

@@ -7,7 +7,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.20.0
-Release: 3%{?dist}%{?rel_suffix}
+Release: 4%{?dist}%{?rel_suffix}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
@@ -23,6 +23,7 @@ BuildRequires: openssl-devel
 %if "%{?xcp_ng_section}" == "extras"
 Patch1000: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
 %endif
+Patch1001: vhd-tool-0.20.0-giant-copy-attempts-limit.XCP-ng.patch
 
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
@@ -51,6 +52,9 @@ install -m 755 _build/install/default/bin/get_vhd_vsize %{buildroot}%{_libexecdi
 %{_libexecdir}/xapi/get_vhd_vsize
 
 %changelog
+* Tue Jul 31 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.20.0-4
+- Fix VHD export regression due to VDI I/O error on EAGAIN exception
+
 * Tue Jul 31 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.20.0-3
 - set unbuffered to false in 'extras' build (for ZFS support)
 
