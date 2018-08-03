@@ -7,7 +7,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.20.0
-Release: 4.1.xcp%{?dist}%{?rel_suffix}
+Release: 4.2.xcp%{?dist}%{?rel_suffix}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ BuildRequires: openssl-devel
 %if "%{?xcp_ng_section}" == "extras"
 Patch1000: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
 %endif
-Patch1001: vhd-tool-0.20.0-giant-copy-attempts-limit.XCP-ng.patch
+Patch1001: vhd-tool-0.20.0-wait-for-actual-data-before-retrying-sendfile.XCP-ng.patch
 
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
@@ -52,6 +52,9 @@ install -m 755 _build/install/default/bin/get_vhd_vsize %{buildroot}%{_libexecdi
 %{_libexecdir}/xapi/get_vhd_vsize
 
 %changelog
+* Thu Aug 02 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.2.xcp
+- Try better fix for EAGAIN exception, with upstream advice
+
 * Wed Aug 01 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.1.xcp
 - Rebuild with patched ocaml-vhd to fix large VDI import error
 - Cf. https://bugs.xenserver.org/browse/XSO-868
