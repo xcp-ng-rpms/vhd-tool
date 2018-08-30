@@ -7,7 +7,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.20.0
-Release: 4.2.xcp%{?dist}%{?rel_suffix}
+Release: 4.3.xcp%{?dist}%{?rel_suffix}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
@@ -52,6 +52,9 @@ install -m 755 _build/install/default/bin/get_vhd_vsize %{buildroot}%{_libexecdi
 %{_libexecdir}/xapi/get_vhd_vsize
 
 %changelog
+* Thu Aug 30 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.3.xcp
+- Rebuild with patched ocaml-vhd to fix regression due to large VDI import fix
+
 * Thu Aug 02 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.2.xcp
 - Try better fix for EAGAIN exception, with upstream advice
 
