@@ -6,18 +6,19 @@
 
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
-Version: 0.20.0
-Release: 4.3.xcp%{?dist}%{?rel_suffix}
+Version: 0.27.0
+Release: 1.1.xcp%{?dist}%{?rel_suffix}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.20.0&format=tar.gz&prefix=vhd-tool-0.20.0#/vhd-tool-0.20.0.tar.gz) = 76a543f11ea62aa2e56c4ba55c2bb898f121d2b2
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.27.0&format=tar.gz&prefix=vhd-tool-0.27.0#/vhd-tool-0.27.0.tar.gz) = 45209eb8ea9ffae893af0e9b4c8e5c42b5f9efac
 Source1: vhd-tool-sparse_dd-conf
 BuildRequires: ocaml-camlp4-devel
 BuildRequires: xs-opam-repo
 BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
 BuildRequires: openssl-devel
+BuildRequires: python
 
 # XCP-ng patches
 %if "%{?xcp_ng_section}" == "extras"
@@ -31,6 +32,7 @@ Simple command-line tools for manipulating and streaming .vhd format file.
 %autosetup -p1
 cp %{SOURCE1} vhd-tool-sparse_dd-conf
 
+
 %build
 eval $(opam config env --root=/usr/lib/opamroot)
 make
@@ -39,33 +41,89 @@ make
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libexecdir}/xapi
 mkdir -p %{buildroot}/etc
+mkdir -p %{buildroot}/opt/xensource/libexec
 install -m 755 _build/install/default/bin/sparse_dd     %{buildroot}%{_libexecdir}/xapi/sparse_dd
 install -m 755 _build/install/default/bin/vhd-tool      %{buildroot}%{_bindir}/vhd-tool
 install -m 644 cli/sparse_dd.conf                       %{buildroot}/etc/sparse_dd.conf
 install -m 755 _build/install/default/bin/get_vhd_vsize %{buildroot}%{_libexecdir}/xapi/get_vhd_vsize
+install -m 755 scripts/get_nbd_extents.py               %{buildroot}/opt/xensource/libexec/get_nbd_extents.py
+install -m 644 scripts/python_nbd_client.py             %{buildroot}/opt/xensource/libexec/python_nbd_client.py
+
+# from brp-python-bytecompile, we should really put files into standard places, symlink and then we would get
+# this for free
+python -c 'import compileall, re, sys; sys.exit (not compileall.compile_dir("'"$RPM_BUILD_ROOT"'", '"1"', "/", 1, re.compile(r"'"/opt/xensource/libexec"'"), quiet=1))'
+if [ $? -ne 0 -a 0$errors_terminate -ne 0 ]; then
+        # One or more of the files had a syntax error
+        exit 1
+fi
+
+# Generate optimized (.pyo) byte-compiled files.
+python -O -c 'import compileall, re, sys; sys.exit(not compileall.compile_dir("'"$RPM_BUILD_ROOT"'", '"1"', "/", 1, re.compile(r"'"/opt/xensource/libexec"'"), quiet=1))' > /dev/null
+if [ $? -ne 0 -a 0$errors_terminate -ne 0 ]; then
+        # One or more of the files had a syntax error
+        exit 1
+fi
 
 %files
 %{_bindir}/vhd-tool
 /etc/sparse_dd.conf
 %{_libexecdir}/xapi/sparse_dd
 %{_libexecdir}/xapi/get_vhd_vsize
+/opt/xensource/libexec/get_nbd_extents.py
+/opt/xensource/libexec/get_nbd_extents.pyc
+/opt/xensource/libexec/get_nbd_extents.pyo
+/opt/xensource/libexec/python_nbd_client.py
+/opt/xensource/libexec/python_nbd_client.pyc
+/opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
-* Thu Aug 30 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.3.xcp
-- Rebuild with patched ocaml-vhd to fix regression due to large VDI import fix
-
-* Thu Aug 02 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.2.xcp
-- Try better fix for EAGAIN exception, with upstream advice
-
-* Wed Aug 01 2018 Samuel Verschelde <stormi-xcp@ylix.fr> - 0.20.0-4.1.xcp
-- Rebuild with patched ocaml-vhd to fix large VDI import error
-- Cf. https://bugs.xenserver.org/browse/XSO-868
-
-* Tue Jul 31 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.20.0-4
-- Fix VHD export regression due to VDI I/O error on EAGAIN exception
-
-* Tue Jul 31 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.20.0-3
+* Fri Sep 14 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.27.0-1.1.xcp
 - set unbuffered to false in 'extras' build (for ZFS support)
+- initially added to 0.20.0-3 on Tue Jul 31 2018, readded on top of 0.27.0
+
+* Mon Aug 06 2018 Christian Lindig <christian.lindig@citrix.com> - 0.27.0-1
+- CA-295097: Wait for FD availability instead of time (#68)
+
+* Tue Jun 12 2018 Christian Lindig <christian.lindig@citrix.com> - 0.26.0-1
+- CA-290450: request block descriptors only for the requested area
+
+* Mon Jun 11 2018 Christian Lindig <christian.lindig@citrix.com> - 0.25.0-1
+- CA-290891: do not call fdatasync on pipes/sockets
+- CA-290243: call get_nbd_extents Python script for 1GiB chunks
+- scripts/python_nbd_client.py: update to match original one
+- scripts/get_nbd_extents.py: fix pycodestyle warnings
+- scripts/python_nbd_client.py: fix pylint warning
+- Add new test to run linters on Python scripts
+- Document Impl.make_stream
+- nbd_input: document expectations about output of get_nbd_extents.py
+
+* Tue May 29 2018 Christian Lindig <christian.lindig@citrix.com> - 0.24.0-1
+- Revert "CA-280242: Open destination VDI O_DIRECT (as well as source)."
+- CA-289459: use fdatasync periodically rather than writing O_DIRECT
+
+* Thu May 24 2018 Christian Lindig <christian.lindig@citrix.com> - 0.23.0-1
+- CA-289145: close socket if error occurs when using lwt connect
+- Fix stress test
+- cli/sparse_dd: fix non-exhaustive pattern matching
+- cli/sparse_dd: make spacing more uniform
+- src/common: make safe-strings compliant
+- src/cohttp_unbuffered_io: make safe-strings compliant
+- Remove deprecation warnings
+
+* Thu May 10 2018 Christian Lindig <christian.lindig@citrix.com> - 0.22.0-1
+- CA-287921: Copy only allocated & non-zero extents in case of NBD device
+- CA-287921: get_nbd_extents.py: make sure assertions are always run
+- CA-287921: image.ml: simplify of_device with "match with exception" syntax
+- CA-287921: add unit stress test to test large extent list
+- CA-287921: test/dummy_extent_reader: make it more efficient using 
+             generator & xrange
+- CA-287921: python_nbd_client: use generator for efficiency
+- CA-287921: Move Travis to opam dockerfile-based config
+- CP-28020: vhd-tool: add cohttp-lwt as build dependency
+- CP-28020: vhd-tool .travis.yml: use debian-9 instead of centos-7
+
+* Mon Apr 23 2018 Christian Lindig <christian.lindig@citrix.com> - 0.21.0-1
+- sha.sha1 no longer exists
 
 * Thu Mar 22 2018 Marcello Seri <marcello.seri@citrix.com> - 0.20.0-1
 - Catch EAGAIN from sendfile and retry
