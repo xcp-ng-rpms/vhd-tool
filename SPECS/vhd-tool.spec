@@ -23,7 +23,6 @@ BuildRequires: openssl-devel
 %if "%{?xcp_ng_section}" == "extras"
 Patch1000: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
 %endif
-Patch1001: vhd-tool-0.20.0-wait-for-actual-data-before-retrying-sendfile.XCP-ng.patch
 
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
