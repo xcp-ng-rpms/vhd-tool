@@ -1,13 +1,9 @@
 # -*- rpm-spec -*-
-# XCP-ng: release suffix for 'extras' section
-%if "%{?xcp_ng_section}" == "extras"
-%define rel_suffix .extras
-%endif
 
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.27.0
-Release: 1.1.xcp%{?dist}%{?rel_suffix}
+Release: 1.2%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
@@ -20,11 +16,6 @@ BuildRequires: ocaml-tapctl-devel
 BuildRequires: openssl-devel
 BuildRequires: python
 
-# XCP-ng patches
-%if "%{?xcp_ng_section}" == "extras"
-Patch1000: vhd-tool-0.20.0-remove_o_direct.XCP-ng.patch
-%endif
-
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
 
@@ -34,7 +25,6 @@ cp %{SOURCE1} vhd-tool-sparse_dd-conf
 
 
 %build
-eval $(opam config env --root=/usr/lib/opamroot)
 make
 
 %install
@@ -77,10 +67,6 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
-* Fri Sep 14 2018 Nicolas Raynaud <nraynaud@gmail.com> - 0.27.0-1.1.xcp
-- set unbuffered to false in 'extras' build (for ZFS support)
-- initially added to 0.20.0-3 on Tue Jul 31 2018, readded on top of 0.27.0
-
 * Mon Aug 06 2018 Christian Lindig <christian.lindig@citrix.com> - 0.27.0-1
 - CA-295097: Wait for FD availability instead of time (#68)
 
