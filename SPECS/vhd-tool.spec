@@ -1,14 +1,16 @@
 # -*- rpm-spec -*-
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
-Version: 0.27.0
+Version: 0.40.0
 Release: 1%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
-Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/%{name}/archive?at=v%{version}&format=tar.gz&prefix=%{name}-%{version}#/%{name}-%{version}.tar.gz
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.27.0&format=tar.gz&prefix=vhd-tool-0.27.0#/vhd-tool-0.27.0.tar.gz) = 45209eb8ea9ffae893af0e9b4c8e5c42b5f9efac
-Source1: vhd-tool-sparse_dd-conf
-BuildRequires: ocaml-camlp4-devel
+
+Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.40.0&format=tar.gz&prefix=vhd-tool-0.40.0#/vhd-tool-0.40.0.tar.gz
+
+
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.40.0&format=tar.gz&prefix=vhd-tool-0.40.0#/vhd-tool-0.40.0.tar.gz) = bf1d98fe9f02bfbbf54ec4d976f401ac9cd5a6e7
+
 BuildRequires: xs-opam-repo
 BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
@@ -20,8 +22,6 @@ Simple command-line tools for manipulating and streaming .vhd format file.
 
 %prep
 %autosetup -p1
-cp %{SOURCE1} vhd-tool-sparse_dd-conf
-
 
 %build
 make
@@ -66,8 +66,56 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Wed Feb 13 2019 Christian Lindig <christian.lindig@citrix.com> - 0.40.0-1
+- CA-309302: ensure we do not get EAGAIN from _sendfile
+
+* Tue Feb 05 2019 Christian Lindig <christian.lindig@citrix.com> - 0.39.0-1
+- CA-309302 Handle some less common cases in direct_copy
+
+* Fri Feb 01 2019 Christian Lindig <christian.lindig@citrix.com> - 0.38.0-1
+- CA-309290 Catch EOF on read
+
+* Wed Jan 23 2019 Christian Lindig <christian.lindig@citrix.com> - 0.37.0-1
+- CA-306395 Rename sendfile64_stubs.c
+- CA-306395 Convert sendfile to direct_copy
+
+* Wed Jan 02 2019 Christian Lindig <christian.lindig@citrix.com> - 0.36.0-1
+- CA-298726: on EINVAL disable O_DIRECT and retry
+
+* Tue Dec 18 2018 Christian Lindig <christian.lindig@citrix.com> - 0.35.0-1
+- CP-29432 simplify Makefile
+- CP-29432 reformat code of main modules
+- Update Travis to use OCaml 4.07
+
+* Fri Nov 09 2018 Christian Lindig <christian.lindig@citrix.com> - 0.34.0-1
+- Completed port to dune and fixed test warnings.
+
+* Wed Oct 31 2018 Christian Lindig <christian.lindig@citrix.com> - 0.33.0-1
+- Update opam files for Opam 2
+
+* Mon Oct 22 2018 Christian Lindig <christian.lindig@citrix.com> - 0.32.0-1
+- fix minor formatting issue
+
+* Tue Sep 18 2018 Christian Lindig <christian.lindig@citrix.com> - 0.31.0-1
+- Update Travis configuration
+- Move to Dune, remove compiler warnings, update opam file
+
+* Wed Sep 05 2018 Christian Lindig <christian.lindig@citrix.com> - 0.30.0-1
+- CP-29300: Update get_nbd_extents.py to match latest NBD protocol
+- Update travis config
+
+* Tue Aug 28 2018 Christian Lindig <christian.lindig@citrix.com> - 0.29.0-1
+- Simplify src/jbuild
+
+* Tue Aug 21 2018 Christian Lindig <christian.lindig@citrix.com> - 0.28.0-1
+- XSI-19 reformat call to Impl.serve
+- XSI-19 locate VHD footer based on file size
+
 * Mon Aug 06 2018 Christian Lindig <christian.lindig@citrix.com> - 0.27.0-1
 - CA-295097: Wait for FD availability instead of time (#68)
+
+* Tue Jul 31 2018 Christian Lindig <christian.lindig@citrix.com> - 0.26.0-5
+- remove obsolete vhd-tool-sparse_dd-conf
 
 * Tue Jun 12 2018 Christian Lindig <christian.lindig@citrix.com> - 0.26.0-1
 - CA-290450: request block descriptors only for the requested area
