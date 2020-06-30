@@ -1,15 +1,15 @@
 # -*- rpm-spec -*-
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
-Version: 0.42.0
-Release: 2%{?dist}
+Version: 0.43.0
+Release: 1%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
-Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.42.0&format=tar.gz&prefix=vhd-tool-0.42.0#/vhd-tool-0.42.0.tar.gz
+Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz
 
 
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.42.0&format=tar.gz&prefix=vhd-tool-0.42.0#/vhd-tool-0.42.0.tar.gz) = b94e989d3eda5efa56cd58d0d5df8c04aeb27612
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz) = d889c029093f99e46f7107a9307e0bc5badc5c8b
 
 BuildRequires: xs-opam-repo
 BuildRequires: ocaml-xcp-idl-devel
@@ -69,6 +69,10 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Wed Feb 12 2020 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-1
+- CP-32843 drop legacy ssl support
+- maintenance: fix travis build
+
 * Fri Aug 23 2019 Edwin Török <edvin.torok@citrix.com> - 0.42.0-2
 - bump packages after xs-opam update
 
