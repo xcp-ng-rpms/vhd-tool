@@ -11,6 +11,8 @@ Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-too
 
 Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz) = d889c029093f99e46f7107a9307e0bc5badc5c8b
 
+Patch1001: vhd-tool-0.43.0-handle-ipv6.patch
+
 BuildRequires: xs-opam-repo
 BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
