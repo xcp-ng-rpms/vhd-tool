@@ -1,0 +1,66 @@
+diff --git c/src/impl.ml w/src/impl.ml
+index 2badd83..98b819b 100644
+--- c/src/impl.ml
++++ w/src/impl.ml
+@@ -577,9 +577,11 @@ let endpoint_of_string = function
+       return (File_descr (fd |> int_of_string |> file_descr_of_int |> Lwt_unix.of_unix_file_descr))
+     | Some "tcp", _ ->
+       let host = match Uri.host uri' with None -> failwith "Please supply a host in the URI" | Some host -> host in
++      let host = Scanf.ksscanf host (fun _ _ -> host) "[%s@]" Fun.id in
+       let port = match Uri.port uri' with None -> failwith "Please supply a port in the URI" | Some port -> port in
+-      Lwt_unix.gethostbyname host >>= fun host_entry ->
+-      return (Sockaddr(Lwt_unix.ADDR_INET(host_entry.Lwt_unix.h_addr_list.(0), port)))
++      Lwt_unix.getaddrinfo host (string_of_int port) [] >>= fun he ->
++      if he = [] then begin raise Not_found end;
++      return (Sockaddr((List.hd he).Unix.ai_addr))
+     | Some "unix", _ ->
+       return (Sockaddr(Lwt_unix.ADDR_UNIX(Uri.path uri')))
+     | Some "file", _ ->
+@@ -596,7 +598,8 @@ let endpoint_of_string = function
+ 
+ let socket sockaddr =
+   let family = match sockaddr with
+-  | Lwt_unix.ADDR_INET(_, _) -> Unix.PF_INET
++  | Lwt_unix.ADDR_INET(addr, port) ->
++    Unix.domain_of_sockaddr (Lwt_unix.ADDR_INET (addr, port))
+   | Lwt_unix.ADDR_UNIX _ -> Unix.PF_UNIX in
+   Lwt_unix.socket family Unix.SOCK_STREAM 0
+ 
+@@ -715,8 +718,11 @@ let write_stream common s destination _source_protocol destination_protocol prez
+       (* TODO: https is not currently implemented *)
+       let port = match Uri.port uri' with None -> (if use_ssl then 443 else 80) | Some port -> port in
+       let host = match Uri.host uri' with None -> failwith "Please supply a host in the URI" | Some host -> host in
+-      Lwt_unix.gethostbyname host >>= fun host_entry ->
+-      let sockaddr = Lwt_unix.ADDR_INET(host_entry.Lwt_unix.h_addr_list.(0), port) in
++      let host = Scanf.ksscanf host (fun _ _ -> host) "[%s@]" Fun.id in
++      Lwt_unix.getaddrinfo host (string_of_int port) [] >>= fun he ->
++      if he = [] then begin raise Not_found end;
++
++      let sockaddr = (List.hd he).Unix.ai_addr in
+       let sock = socket sockaddr in
+       Lwt.catch (fun () ->
+           Lwt_unix.connect sock sockaddr
+@@ -775,6 +781,7 @@ let write_stream common s destination _source_protocol destination_protocol prez
+     then fail(Failure(Printf.sprintf "this destination only supports protocols: [ %s ]" (String.concat "; " (List.map string_of_protocol possible_protocols))))
+     else
+       let start = Unix.gettimeofday () in
++      Printf.fprintf stderr "*** BRS: PROTOCOL ISOKAY" ;
+       (match destination_protocol with
+           | Nbd -> stream_nbd
+           | Human -> stream_human
+@@ -784,6 +791,7 @@ let write_stream common s destination _source_protocol destination_protocol prez
+       c.Channels.close () >>= fun () ->
+       match p with
+       | Some p ->
++        Printf.fprintf stderr "*** BRS: STREAM ISOKAY" ;
+         let time = Unix.gettimeofday () -. start in
+         let physical_rate = Int64.(to_float p /. time) in
+         if common.Common.verb then begin
+@@ -805,6 +813,7 @@ let write_stream common s destination _source_protocol destination_protocol prez
+           Printf.printf "Speedup: %.1f\n" speedup;
+           Printf.printf "Virtual data rate: %s/sec\n" (add_unit (physical_rate *. speedup));
+         end;
++        Printf.fprintf stderr "*** BRS: END ISOKAY" ;
+         return ()
+       | None -> return ()
+ 
