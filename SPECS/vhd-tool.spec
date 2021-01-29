@@ -2,7 +2,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 4%{?dist}
+Release: 4.0.ipv6.1%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
@@ -11,6 +11,7 @@ Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-too
 
 Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz) = d889c029093f99e46f7107a9307e0bc5badc5c8b
 
+# XCP-ng specific sources and patches
 Patch1001: vhd-tool-0.43.0-handle-ipv6.patch
 
 BuildRequires: xs-opam-repo
@@ -72,6 +73,9 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Thu Feb 17 2022 Benjamin Reis <benjamin.reis@vates.fr> - 0.43.0-4.0.ipv6.1
+- Add IPv6 patch: vhd-tool-0.43.0-handle-ipv6.patch
+
 * Mon Sep 27 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 0.43.0-4
 - Bump package for libev dependency
 
@@ -177,7 +181,7 @@ fi
 - CA-287921: get_nbd_extents.py: make sure assertions are always run
 - CA-287921: image.ml: simplify of_device with "match with exception" syntax
 - CA-287921: add unit stress test to test large extent list
-- CA-287921: test/dummy_extent_reader: make it more efficient using 
+- CA-287921: test/dummy_extent_reader: make it more efficient using
              generator & xrange
 - CA-287921: python_nbd_client: use generator for efficiency
 - CA-287921: Move Travis to opam dockerfile-based config
