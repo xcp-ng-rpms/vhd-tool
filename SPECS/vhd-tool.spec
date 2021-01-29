@@ -2,7 +2,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 1%{?dist}
+Release: 1.0.ipv6.1%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
@@ -11,6 +11,7 @@ Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-too
 
 Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz) = d889c029093f99e46f7107a9307e0bc5badc5c8b
 
+# XCP-ng specific sources and patches
 Patch1001: vhd-tool-0.43.0-handle-ipv6.patch
 
 BuildRequires: xs-opam-repo
@@ -71,6 +72,9 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Fri Jan 29 2021 Benjamin Reis <benjamin.reis@vates.fr> - 0.43.0-1.0.ipv6.1
+- Add IPv6 patch: vhd-tool-0.43.0-handle-ipv6.patch
+
 * Wed Feb 12 2020 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-1
 - CP-32843 drop legacy ssl support
 - maintenance: fix travis build
