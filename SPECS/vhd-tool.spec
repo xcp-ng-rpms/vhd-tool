@@ -2,7 +2,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 1.0.ipv6.1%{?dist}
+Release: 1.0.ipv6.2%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
@@ -72,6 +72,9 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Fri Apr 30 2021 Benjamin Reis <benjamin.reis@vates.fr> - 0.43.0-1.0.ipv6.2
+- Modify vhd-tool-0.43.0-handle-ipv6.patch to be aligned with upstream merge
+
 * Fri Jan 29 2021 Benjamin Reis <benjamin.reis@vates.fr> - 0.43.0-1.0.ipv6.1
 - Add IPv6 patch: vhd-tool-0.43.0-handle-ipv6.patch
 
