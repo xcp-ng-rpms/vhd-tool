@@ -2,7 +2,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 1%{?dist}
+Release: 4%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
@@ -16,6 +16,7 @@ BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
 BuildRequires: openssl-devel
 BuildRequires: python
+Requires:      libev
 
 %description
 Simple command-line tools for manipulating and streaming .vhd format file.
@@ -69,6 +70,15 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Mon Sep 27 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 0.43.0-4
+- Bump package for libev dependency
+
+* Mon Sep 27 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 0.43.0-3
+- Bump package after xs-opam update
+
+* Tue Jul 13 2021 Edwin Török <edvin.torok@citrix.com> - 0.43.0-2
+- bump packages after xs-opam update
+
 * Wed Feb 12 2020 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-1
 - CP-32843 drop legacy ssl support
 - maintenance: fix travis build
