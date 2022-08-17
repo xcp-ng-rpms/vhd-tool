@@ -2,7 +2,7 @@
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 4%{?dist}
+Release: 4.1%{?dist}
 License: LGPL+linking exception
 URL:  https://github.com/xapi-project/vhd-tool
 
@@ -70,6 +70,9 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Wed Aug 17 2022 Gael Duperrey <gduperrey@vates.fr> - 0.43.0-4.1
+- Rebuild for updated xapi from XS82ECU1011
+
 * Mon Sep 27 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 0.43.0-4
 - Bump package for libev dependency
 
