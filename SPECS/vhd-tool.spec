@@ -1,16 +1,13 @@
+%global package_speccommit fd9b751fea5d096281beba29a6d8f0951a700f36
+%global package_srccommit v0.43.0
 # -*- rpm-spec -*-
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 4.1%{?dist}
-License: LGPL+linking exception
+Release: 10.1%{?xsrel}%{?dist}
+License: LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:  https://github.com/xapi-project/vhd-tool
-
-Source0: https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz
-
-
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XSU/repos/vhd-tool/archive?at=v0.43.0&format=tar.gz&prefix=vhd-tool-0.43.0#/vhd-tool-0.43.0.tar.gz) = d889c029093f99e46f7107a9307e0bc5badc5c8b
-
+Source0: vhd-tool-0.43.0.tar.gz
 BuildRequires: xs-opam-repo
 BuildRequires: ocaml-xcp-idl-devel
 BuildRequires: ocaml-tapctl-devel
@@ -70,6 +67,22 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Wed Aug 09 2023 Gael Duperrey <gduperrey@vates.fr> - 0.43.0-10.1
+- Sync with hotfix XS82ECU1040
+- *** Upstream changelog ***
+- * Thu Jul 20 2023 Rob Hoes <rob.hoes@citrix.com> - 0.43.0-10
+- - Bump release and rebuild
+- * Mon Jun 19 2023 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-9
+- - Bump release and rebuild
+- * Thu Jun 08 2023 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-8
+- - Bump release and rebuild
+- * Fri May 12 2023 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-7
+- - Bump release and rebuild
+- * Fri May 12 2023 Christian Lindig <christian.lindig@citrix.com> - 0.43.0-6
+- - Bump release and rebuild
+- * Tue Feb 28 2023 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 0.43.0-5
+- - Change license to match the one in the source repo
+
 * Wed Aug 17 2022 Gael Duperrey <gduperrey@vates.fr> - 0.43.0-4.1
 - Rebuild for updated xapi from XS82ECU1011
 
@@ -178,7 +191,7 @@ fi
 - CA-287921: get_nbd_extents.py: make sure assertions are always run
 - CA-287921: image.ml: simplify of_device with "match with exception" syntax
 - CA-287921: add unit stress test to test large extent list
-- CA-287921: test/dummy_extent_reader: make it more efficient using 
+- CA-287921: test/dummy_extent_reader: make it more efficient using
              generator & xrange
 - CA-287921: python_nbd_client: use generator for efficiency
 - CA-287921: Move Travis to opam dockerfile-based config
