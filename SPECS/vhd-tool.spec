@@ -1,10 +1,10 @@
-%global package_speccommit fd9b751fea5d096281beba29a6d8f0951a700f36
+%global package_speccommit d859e426bebd21686ccbd06e6cb1e807cbea566d
 %global package_srccommit v0.43.0
 # -*- rpm-spec -*-
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 10%{?xsrel}%{?dist}
+Release: 11%{?xsrel}%{?dist}
 License: LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: vhd-tool-0.43.0.tar.gz
@@ -67,6 +67,9 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Mon Oct 02 2023 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 0.43.0-11
+- Bump release and rebuild
+
 * Thu Jul 20 2023 Rob Hoes <rob.hoes@citrix.com> - 0.43.0-10
 - Bump release and rebuild
 
