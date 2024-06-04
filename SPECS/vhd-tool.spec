@@ -1,10 +1,10 @@
-%global package_speccommit d859e426bebd21686ccbd06e6cb1e807cbea566d
+%global package_speccommit 34cec7a3cf20fd0305f64a0b0eef2feb910b5089
 %global package_srccommit v0.43.0
 # -*- rpm-spec -*-
 Summary: Command-line tools for manipulating and streaming .vhd format files
 Name:    vhd-tool
 Version: 0.43.0
-Release: 11%{?xsrel}%{?dist}
+Release: 18%{?xsrel}%{?dist}
 License: LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:  https://github.com/xapi-project/vhd-tool
 Source0: vhd-tool-0.43.0.tar.gz
@@ -67,6 +67,27 @@ fi
 /opt/xensource/libexec/python_nbd_client.pyo
 
 %changelog
+* Fri Mar 08 2024 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-18
+- Bump release and rebuild
+
+* Wed Mar 06 2024 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-17
+- Bump release and rebuild
+
+* Tue Mar 05 2024 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-16
+- Bump release and rebuild
+
+* Fri Nov 03 2023 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-15
+- Bump release and rebuild
+
+* Tue Oct 24 2023 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-14
+- Bump release and rebuild
+
+* Tue Oct 24 2023 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-13
+- Bump release and rebuild
+
+* Wed Oct 18 2023 Christian Lindig <christian.lindig@cloud.com> - 0.43.0-12
+- Bump release and rebuild
+
 * Mon Oct 02 2023 Pau Ruiz Safont <pau.ruizsafont@cloud.com> - 0.43.0-11
 - Bump release and rebuild
 
